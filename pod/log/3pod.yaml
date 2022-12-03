@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: counter
+spec:
+  containers:
+  - name: count			##此容器为产生日志的容器
+    image: busybox		##容器名称
+    args:				##命令模拟产生日志
+    - /bin/sh
+    - -c
+    - >
+      i=0;
+      while true;
+      do
+        echo "$i: $(date)" >> /var/log/1.log;			##产生日志1.log文件
+        echo "$(date) INFO $i" >> /var/log/2.log;		##产生日志2.log文件
+        i=$((i+1));
+        sleep 1;
+      done      
+    volumeMounts:		##挂载卷
+    - name: varlog
+      mountPath: /var/log
+  - name: count-log-1		##容器名称，边车容器1
+    image: busybox
+    args: [/bin/sh, -c, 'tail -n+1 -f /var/log/1.log']
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  - name: count-log-2		##容器名称，边车容器2
+    image: busybox
+    args: [/bin/sh, -c, 'tail -n+1 -f /var/log/2.log']
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+  volumes:			##使用emptyDir挂载卷
+  - name: varlog
+    emptyDir: {}
+
