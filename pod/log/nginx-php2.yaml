@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-php
+spec:
+  containers:
+  - name: web
+    image: lizhenliang/nginx-php
+    volumeMounts:
+    - name: logs
+      mountPath: /usr/local/nginx/logs
+  volumes:
+  - name: logs
+    emptyDir: {}
