@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: headless-service-web
+spec:
+  clusterIP: None			##比普通service多这个
+  selector:
+    app: headless-service-web
+    project: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+

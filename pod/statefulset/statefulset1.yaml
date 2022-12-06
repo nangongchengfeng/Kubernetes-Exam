@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: statefulset-nginx1
+  labels:
+    app: statefulset-nginx1			##此deployment的label
+spec:
+  serviceName: headless-service-web		##指定headless-service的name
+  replicas: 3
+  selector:			##选择下面模板里面的pod标签
+    matchLabels:
+      app: headless-service-web
+      project: nginx
+  template:
+    metadata:
+      labels:			##定义此pod的标签
+        app: headless-service-web
+        project: nginx
+    spec:
+      containers:
+      - name: statefulset-nginx1
+        image: nginx
+        ports:
+        - containerPort: 80
+

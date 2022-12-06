@@ -189,9 +189,7 @@ metadata:
   name: nfs-client
 mountOptions: []
 parameters:
-  archiveOnDelete: 'false'
+  archiveOnDelete: "true"
 provisioner: nfs-nfs-client
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
-
-
