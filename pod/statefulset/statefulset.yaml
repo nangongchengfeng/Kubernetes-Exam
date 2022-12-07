@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: statefulset-nginx1
+  labels:
+    app: statefulset-nginx1
+spec:
+  serviceName: headless-service-web
+  replicas: 3
+  selector:
+    matchLabels:
+      app: headless-service-web
+      project: nginx
+  template:
+    metadata:
+      labels:
+        app: headless-service-web
+        project: nginx
+    spec:
+      containers:
+      - name: statefulset-nginx1
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "nfs-client"
+      resources:
+        requests:
+          storage: 1Gi
+
