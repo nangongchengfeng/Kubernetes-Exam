@@ -1,0 +1,40 @@
+试题1 RBAC权限
+kubectl config use-context k8s
+kubectl create clusterrole deployment-clusterrole --verb=create --resource=deployments,daemonsets,statefulsets
+kubectl create serviceaccount cicd-token -n app-team1
+kubectl create rolebinding cicd-token --serviceaccount=app-team1:cicd-token --clusterrole=deployment-clusterrole -n app-team1
+kubetcl -n app-team1 describle rolebinding cicd-token
+
+试题2 节点不可用
+kubect config use-context k8s
+kubectl cordon node-name
+kubectl drain node-name --ignore-daemonsets 
+报错 --delete-local-data --force
+kubectl uncordon node -name
+
+3、升级K8S版本
+kubectl config use-context k8s
+
+kubectl cordon k8s-master
+kubectl drain k8s-master --force --ignore-daemonsets --delete-local-data
+
+ssh k8s-master
+sudo -i
+
+apt install kubeadm=1.20.1 -y 
+kubeadm upgrade plan
+kubeadm upgrade apply v1.20.1 --etcd-upgrade=false  不升级ETCD
+
+升级kubectl 和 kubelet
+apt install -y kubectl=1.20.1 kubelet=.20.1
+systemctl restart kubelet
+
+设置master 可调度
+kubectl uncordon k8s-master
+
+4、备份ETCD数据库
+
+
+
+
+
