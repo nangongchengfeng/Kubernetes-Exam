@@ -93,6 +93,50 @@ spec:
     image: busybox
 
 12、创建PV
+apiVersion: v1
+Kind: PersistentVolume 
+metadata:
+  name: app-data
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOne
+  hostPath:
+    path: "/src/app-data"
+
+13、Pod 使用PVC
+ 13_pvc_pod.yaml
+ kubectl edit pvc pv-volume --save-config --record
+
+14、给pod增加一个容器
+14_many_pod.yaml
+kubectl get pod legacy-app -o yaml > legacy-app.yaml # 导出后修改文件 
+kubectl delete pod legacy-app 
+kubectl apply -f legacy-app.yaml
+
+15、获取Pod的错误日志
+kubectl config use-context k8s
+kubectl logs bar | grep fail > /opt/log.txt
+
+16、统计使用CPU最高的Pod
+kubectl config use-context k8s
+kubectl top pod -l name=cup --sort-by='cpu' -A
+echo "pod-name" > /opt/pod_name
+
+17、处理Noready的节点
+
+kubectl config use-context k8s
+kubectl get node
+
+ssh node-name
+sudo -i
+
+systemctl status kubelet 
+systemctl start kubelet
+systemctl enable kubelet
+
+
 
 
 
