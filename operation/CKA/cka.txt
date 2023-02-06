@@ -34,6 +34,68 @@ kubectl uncordon k8s-master
 
 4、备份ETCD数据库
 
+5、网络隔离
+5_networkpolicy.yaml
+
+6、SVC暴露
+kubectl edit deployment front-end
+      containers: 
+      - image: nginx 
+        imagePullPolicy: Always 
+        name: nginx 
+        ports:
+        - name: http 
+          protocol: TCP 
+          containerPort: 80 
+kubectl expose deployment front-end --port=80 --target-port=80 --type=NodePort --name=front-end-svc
+
+7、INGRESS  暴露
+7_ingress_path.yaml
+
+8、扩容POD的数量
+kubectl config use-context k8s
+kubectl scale deployment pod-name --replicas=5
+
+9、固定POD Nodeselector
+
+kubectl config use-context k8s
+kubectl label node disk=ssd
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-v1
+spce:
+  containers:
+  - name: nginx
+    image: nginx
+  nodeselector:
+    disk: ssd
+
+kubectl get pod nginx -owide 
+
+10、统计准备就绪的节点数量
+kubectl config use-context k8s
+kubectl describe nodes | grep -i Taints | grep -vc NoSchedule
+echo " " > /opt/num_count.txt
+
+11、Pod配置多个容器
+kubectl config use-context k8s
+apiVersion: v1
+Kind: Pod
+metadata:
+  name: many-pods
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  - name: busybox
+    image: busybox
+
+12、创建PV
+
+
+
 
 
 
