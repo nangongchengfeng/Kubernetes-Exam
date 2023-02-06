@@ -1,11 +1,11 @@
-试题1 RBAC权限
+1、 RBAC权限
 kubectl config use-context k8s
 kubectl create clusterrole deployment-clusterrole --verb=create --resource=deployments,daemonsets,statefulsets
 kubectl create serviceaccount cicd-token -n app-team1
 kubectl create rolebinding cicd-token --serviceaccount=app-team1:cicd-token --clusterrole=deployment-clusterrole -n app-team1
 kubetcl -n app-team1 describle rolebinding cicd-token
 
-试题2 节点不可用
+2、 节点不可用
 kubect config use-context k8s
 kubectl cordon node-name
 kubectl drain node-name --ignore-daemonsets 
