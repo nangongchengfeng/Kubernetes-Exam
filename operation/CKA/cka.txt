@@ -9,7 +9,7 @@ kubetcl -n app-team1 describle rolebinding cicd-token
 kubect config use-context k8s
 kubectl cordon node-name
 kubectl drain node-name --ignore-daemonsets 
-报错 --delete-local-data --force
+报错 --delete-emptydir-data  --force
 kubectl uncordon node -name
 
 3、升级K8S版本
@@ -33,6 +33,12 @@ systemctl restart kubelet
 kubectl uncordon k8s-master
 
 4、备份ETCD数据库
+备份
+ETCDCTL_API=3 ./etcdctl snapshot save /root/etcd.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key
+恢复
+ETCDCTL_API=3 ./etcdctl snapshot restore /root/etcd.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key --data-dir=/var/lib/etcd
+
+
 
 5、网络隔离
 5_networkpolicy.yaml
@@ -135,12 +141,4 @@ sudo -i
 systemctl status kubelet 
 systemctl start kubelet
 systemctl enable kubelet
-
-
-
-
-
-
-
-
 
