@@ -1,0 +1,29 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: qq
+  namespace: k8s
+  labels:
+    name: cpu-utilizer
+spec:
+  containers:
+  - name: cpu-utilizer
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 8081
+    resources:
+      requests:
+        cpu: 50m
+      limits:
+        cpu: 100m
+    command: ["/bin/bash"]    
+    args:
+    - -c 
+    - |
+      while :
+      do
+      echo "are you ok"
+      sleep 0.2
+      done 
+
