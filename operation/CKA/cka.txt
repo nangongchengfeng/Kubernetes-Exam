@@ -1,15 +1,15 @@
-试题1 RBAC权限
+1、 RBAC权限
 kubectl config use-context k8s
 kubectl create clusterrole deployment-clusterrole --verb=create --resource=deployments,daemonsets,statefulsets
 kubectl create serviceaccount cicd-token -n app-team1
 kubectl create rolebinding cicd-token --serviceaccount=app-team1:cicd-token --clusterrole=deployment-clusterrole -n app-team1
 kubetcl -n app-team1 describle rolebinding cicd-token
 
-试题2 节点不可用
+2、 节点不可用
 kubect config use-context k8s
 kubectl cordon node-name
 kubectl drain node-name --ignore-daemonsets 
-报错 --delete-local-data --force
+报错 --delete-emptydir-data  --force
 kubectl uncordon node -name
 
 3、升级K8S版本
@@ -33,8 +33,112 @@ systemctl restart kubelet
 kubectl uncordon k8s-master
 
 4、备份ETCD数据库
+备份
+ETCDCTL_API=3 ./etcdctl snapshot save /root/etcd.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key
+恢复
+ETCDCTL_API=3 ./etcdctl snapshot restore /root/etcd.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key --data-dir=/var/lib/etcd
 
 
 
+5、网络隔离
+5_networkpolicy.yaml
 
+6、SVC暴露
+kubectl edit deployment front-end
+      containers: 
+      - image: nginx 
+        imagePullPolicy: Always 
+        name: nginx 
+        ports:
+        - name: http 
+          protocol: TCP 
+          containerPort: 80 
+kubectl expose deployment front-end --port=80 --target-port=80 --type=NodePort --name=front-end-svc
+
+7、INGRESS  暴露
+7_ingress_path.yaml
+
+8、扩容POD的数量
+kubectl config use-context k8s
+kubectl scale deployment pod-name --replicas=5
+
+9、固定POD Nodeselector
+
+kubectl config use-context k8s
+kubectl label node disk=ssd
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-v1
+spce:
+  containers:
+  - name: nginx
+    image: nginx
+  nodeselector:
+    disk: ssd
+
+kubectl get pod nginx -owide 
+
+10、统计准备就绪的节点数量
+kubectl config use-context k8s
+kubectl describe nodes | grep -i Taints | grep -vc NoSchedule
+echo " " > /opt/num_count.txt
+
+11、Pod配置多个容器
+kubectl config use-context k8s
+apiVersion: v1
+Kind: Pod
+metadata:
+  name: many-pods
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  - name: busybox
+    image: busybox
+
+12、创建PV
+apiVersion: v1
+Kind: PersistentVolume 
+metadata:
+  name: app-data
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOne
+  hostPath:
+    path: "/src/app-data"
+
+13、Pod 使用PVC
+ 13_pvc_pod.yaml
+ kubectl edit pvc pv-volume --save-config --record
+
+14、给pod增加一个容器
+14_many_pod.yaml
+kubectl get pod legacy-app -o yaml > legacy-app.yaml # 导出后修改文件 
+kubectl delete pod legacy-app 
+kubectl apply -f legacy-app.yaml
+
+15、获取Pod的错误日志
+kubectl config use-context k8s
+kubectl logs bar | grep fail > /opt/log.txt
+
+16、统计使用CPU最高的Pod
+kubectl config use-context k8s
+kubectl top pod -l name=cup --sort-by='cpu' -A
+echo "pod-name" > /opt/pod_name
+
+17、处理Noready的节点
+
+kubectl config use-context k8s
+kubectl get node
+
+ssh node-name
+sudo -i
+
+systemctl status kubelet 
+systemctl start kubelet
+systemctl enable kubelet
 

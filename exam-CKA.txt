@@ -1,0 +1,185 @@
+exam-CKA
+
+source <(kubectl completion bash)
+
+alias k=kubectl
+complete -o default -F __start_kubectl k
+
+
+题目：
+
+题目一. RBAC 
+        [node]$ kubectl config use-context k8s
+
+        创建一个名为deployment-clusterrole的clusterrole，该clusterrole只允许创建deployment、daemonset、statefulset的create操作。
+
+        在名字为  app-team1的namespace下创建一个名为cicd-token的serviceAccount。
+
+   限于namespace app-team1,将新的clusterrole deployment-clusterrole绑定到新的serviceAccount cicd-token。
+
+
+
+题目二. Top
+        [node]$ kubectl config use-context k8s
+
+        通过pod label name=cpu-utilizer 直到运行占用大量cpu的pod，将pod名写入文件
+
+/opt/KUTR00401/KUTR00401.txt
+
+
+
+
+
+题目三. Networkpolicy        
+        [node]$ kubectl config use-context hk8s
+
+        在namespace my-app中创建一个allow-port-from-namespace的新networkpolicy,确保新的NetwoekPolicy允许namespace big-corp中的Pods连接到namespace my-app中的Pod的端口8080。
+
+进一步确认Networkolicy：
+
+不允许对没有监听 8080 的Pods访问
+
+不允许不来自namespace my-app 的Pods访问
+
+
+
+
+题目四： Service
+        [node]$ kubectl config use-context k8s
+
+        重新配置现有的front-end以及添加http的端口规范来公开现有的容器nginx的端口80/tcp
+
+        创建一个名叫front-end-svc服务，公开容器端口http。使用NodePort来公开各个Pods。
+
+
+
+
+
+题目五.  Ingress
+         [node]$ kubectl config use-context k8s
+
+         创建一个新的nginx Ingress资源：
+
+        名称： pong
+
+        Namespace: ing-internal
+
+        使用服务端口 5678 在路径 /hello上公开服务 hello  
+
+        可以使用curl -kl <IP> /hello
+
+
+
+
+
+题目六. 副本扩容
+        [node]$ kubectl config use-context k8s
+
+        将deployment 从 loadbalancer 扩展至 5 pods
+
+
+
+
+
+
+题目七. 分配Pod
+                
+
+        按照要求调度一个Pod：
+
+        名称： nginux-kusc00401
+
+        Image: nginx
+
+        Node selector: disk=ssd
+
+
+题目八： 统计污点
+        [node]$ kubectl config use-context k8s
+
+        统计有多少个worker nodes 以准备就绪（不包括被打上Taint：NoSchedule的节点），并将数量写入到/opt/KUSC00402/kusc00402.txt
+
+
+
+题目九：多容器运行一个Pod
+         [node]$ kubectl config use-context k8s
+
+         创建一个名叫kucc4的pod，在pod里面分别为每个images单独运行一个app container
+
+Nginx+redis+memcached
+
+
+
+题目十. PV
+        [node]$ kubectl config use-context hk8s
+
+        创建名叫app-data 的pv，容量为2Gi，访问模式为ReadWriteOnce。 Volume类型为hostPath，位于/srv/app-data
+
+
+
+
+
+题目十一. PVC
+          [node]$ kubectl config use-context ok8s
+
+        创建一个新的PersistentVolumeClaim:
+
+        名称： pv-volume
+
+        Class: csi-hostpath-sc
+
+        容量: 10Mi
+
+------------------------------------
+
+        创建一个新的Pod，这个Pod将volume挂在到 PersistentVolumeClaim:
+
+        名称： web-server
+
+        Image: nginx
+
+        挂载路径： /usr/share/nginx/html
+
+        配置新的Pod，对volume具有 ReadWriteOnce 权限   
+
+
+
+
+题目十二. Logs
+        [node]$ kubectl config use-context k8s
+
+        监控 pod bar的日志并：提取与错误 file-not-found 相对应的日志行，将这些日志写入到 /opt/KUTR00101/bar
+
+
+
+
+题目十三. Sidecar边车（遇到可以先做后面，我考试第5题出现）
+        [node]$ kubectl config use-context k8s
+
+        现有一个Pod legacy-app 内置日志，使用busybox Image添加一个 sidecar 容器添加到现有Pod legacy-app中新sidecar容器必须运行一下指令
+
+/bin/sh, -c, 'tail -n+1 -f /var/log/legacy-app.log'。
+并且这个 sidecar 和原有的镜像挂载一个名为 logs 的 volume，挂载的目录为/var/log/
+
+
+
+
+题目十四. 升级（升级需要时间，建议最后做，我考试第2题出现）
+         [node]$ kubectl config use-context mk8s
+
+
+
+
+
+题目十五. Etcd备份
+
+
+
+题目十六. Node 状态排错（送分题）
+
+
+
+
+题目十七. Node驱逐Pod
+
+

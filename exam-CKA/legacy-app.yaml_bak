@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cni.projectcalico.org/containerID: 384d32e90713fca75e0c037935a32693375d75b71d1c008d9212bde8beedec0d
+    cni.projectcalico.org/podIP: 172.20.28.122/32
+    cni.projectcalico.org/podIPs: 172.20.28.122/32
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Pod","metadata":{"annotations":{},"name":"legacy-app","namespace":"k8s"},"spec":{"containers":[{"args":["/bin/sh","-c","i=0; while true; do\n  echo \"$i: $(date)\" \u003e\u003e /var/log/legacy-app.log;\n  i=$((i+1));\n  sleep 1;\ndone     \n"],"image":"busybox","name":"legacy-app"}]}}
+  creationTimestamp: "2023-02-28T06:10:00Z"
+  name: legacy-app
+  namespace: k8s
+  resourceVersion: "18904436"
+  uid: 43586115-10de-4b4e-8904-280c399068d1
+spec:
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - "i=0; while true; do\n  echo \"$i: $(date)\" >> /var/log/legacy-app.log;\n  i=$((i+1));\n
+      \ sleep 1;\ndone     \n"
+    image: busybox
+    imagePullPolicy: Always
+    name: legacy-app
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-d75dq
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: node02
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-d75dq
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-02-28T06:10:00Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-02-28T06:10:05Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-02-28T06:10:05Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-02-28T06:10:00Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://a57ec023bc114c89c969ad83a3f82cd2054132a8f110dc150de2d8b0105f7e1e
+    image: busybox:latest
+    imageID: docker-pullable://busybox@sha256:5acba83a746c7608ed544dc1533b87c737a0b0fb730301639a0179f9344b1678
+    lastState: {}
+    name: legacy-app
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-02-28T06:10:04Z"
+  hostIP: 192.168.102.41
+  phase: Running
+  podIP: 172.20.28.122
+  podIPs:
+  - ip: 172.20.28.122
+  qosClass: BestEffort
+  startTime: "2023-02-28T06:10:00Z"

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bar
+  namespace: k8s
+  labels:
+    name: bar-log
+spec:
+  containers:
+  - name: bar-log
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 8888
+    resources:
+      requests:
+        cpu: 50m
+      limits:
+        cpu: 100m
+    command: ["/bin/sh","-c","while true;do echo file-not-foundtest;sleep 10000;done"]
+
