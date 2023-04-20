@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pod-restriction
+  namespace: test
+spec:
+  podSelector:
+    matchLabels:
+      app: products-service
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: qaqa
+    - podSelector:
+        matchLabels:
+          environment: testing
