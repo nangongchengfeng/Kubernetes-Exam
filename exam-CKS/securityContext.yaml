@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secdep
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+     app: secdep
+  template:
+    metadata:
+      labels:
+        app: secdep
+    spec:
+      securityContext:
+        runAsUser: 1000
+      containers:
+      - name: secdep-container
+        image: nginx
+        securityContext:
+          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: false
